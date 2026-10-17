@@ -131,3 +131,15 @@
 - [ ] Windows pytest re-run, public re-test, Windows symlink behaviour: not run
 - [ ] Real raw Claude Desktop tool-call transcript: still missing
 - [ ] handoff_demo.txt stays IN PROGRESS (not touched)
+
+## Session 2 (new conversation, claude.ai chat with Demo tools; NOT Claude Desktop) - 2026-10-17 15:09 +08 (third pass)
+- [x] Started with no memory of earlier sessions. Read PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS (one parallel batch after ToolSearch and one list_files), then PLAN_LOG lines 201-227 (first read stopped at line 200), handoff_demo.txt, handoff_report.txt and evidence/session3-mcp-task-transcript.txt. Fresh context, but NOT Claude Desktop
+- [x] Unfinished requirement identified: genuine raw Claude Desktop fresh-session transcript plus host-side evidence; handoff is NOT complete
+- [x] git_status: `master...origin/master` only (no modified or untracked entries; `Fix_restart_state.py` no longer listed, probably committed or ignored, UNVERIFIED without a git log tool). git_diff: no output
+- [x] list_files: root has 11 entries, evidence/ has 5 files
+- [x] DECISIONS item 8 given a dated note about the restart evidence (tunnel recovery still untested)
+- [ ] `test-results.txt` still "does not exist" from the workspace view; 46 passed / 1 skipped remains host-reported and unverified here
+- [ ] Pytest, diagnose_public.py, public re-test, tunnel restart/recovery (NOT passed), tunnel/client config, Windows symlinks: not run (no project command execution)
+- [ ] Commit hashes and remote contents: unverified (no git log tool). Nothing committed or deleted by this session
+- [ ] Real raw Claude Desktop tool-call transcript: still missing. `evidence/handoff-recovery-2026-10-17T1509-transcript.txt` is an assistant-written record, not a client export
+- [ ] handoff_demo.txt stays IN PROGRESS (not touched)

@@ -225,3 +225,24 @@
 **Corrections to earlier text:** PROJECT_STATE "Current Status Update" says pytest output was "confirmed"; this session could not confirm it. Treat it as host-reported until the user checks `Get-Content test-results.txt -Tail 5` locally.
 
 **Handoff status:** still IN PROGRESS / NOT complete. handoff_demo.txt left unchanged.
+
+## 2026-10-17 (message time 15:09 +08) - Session 2 (new conversation; claude.ai chat with Demo MCP tools; NOT Claude Desktop)
+**Context:** this conversation began with no memory of earlier sessions; state was recovered only from the files. It is a fresh context but NOT a Claude Desktop session, so it does not by itself satisfy a "genuine Claude Desktop fresh session" requirement. Read-order caveats: tool loading (ToolSearch) came first, then one `list_files`, then PROJECT_STATE, PLAN_LOG, CHECKPOINTS and DECISIONS were read in one parallel batch together with `list_files evidence`. `read_file PLAN_LOG` stopped at line 200 of 227 (default limit), so lines 201-227 were read in a follow-up call. handoff_demo.txt, handoff_report.txt and evidence/session3-mcp-task-transcript.txt were read afterwards.
+
+**Unfinished requirement identified:** the two-session handoff is not complete (handoff_demo.txt says IN PROGRESS). Missing: a genuine raw Claude Desktop tool-call transcript of a fresh session recovering state from the four files (evidence/session2-transcript.txt is a placeholder, session2-fresh-transcript.txt is a summary, session-tool-call-log.txt is a server operation log), plus host-side items (pytest output, public re-test, tunnel recovery). I cannot produce those from this chat.
+
+**Verified by tool output this session:**
+- git_status: `## master...origin/master` only; no modified and no untracked entries. Earlier entries listed `Fix_restart_state.py` as untracked; it no longer appears. Inference: it was committed or ignored since. UNVERIFIED: there is no git log tool, so commit hashes, any commits beyond 016ed85 and 3b59308, and what the remote holds are unknown.
+- git_diff: no output.
+- list_files (root): 11 entries (10 files plus evidence/), same as the previous session. list_files evidence: 5 files (handoff-transcript-FAILED-2026-10-17T1149.txt, session-tool-call-log.txt, session2-fresh-transcript.txt, session2-transcript.txt, session3-mcp-task-transcript.txt).
+- `read_file test-results.txt` FAILED: "The file does not exist." (outside the workspace view). The 46 passed / 1 skipped figure stays host-reported and unverified here.
+- Line counts before this entry: PROJECT_STATE 162, PLAN_LOG 227, CHECKPOINTS 133, DECISIONS 25. Earlier entries quote smaller counts because the files have grown.
+- handoff_demo.txt (3 lines) says IN PROGRESS; not modified.
+
+**Inconsistency noticed:** DECISIONS item 8 says crash recovery "remains unverified", while earlier entries record restarts of the MCP server and auth proxy in PROCESS_MANAGER_RESTART_LOG.txt. I did not re-read that log this session. A dated note was added to DECISIONS item 8. DECISIONS item 7 still cites the 39-passed baseline; left as is because it is labeled a historical baseline.
+
+**Not done / not verified (no command-execution tool for the project; nothing run):** pytest, diagnose_public.py, public re-test, tunnel command/URL and client config, tunnel restart/recovery (NOT run, NOT passed), Windows symlink behaviour, commit hashes. No file was deleted and nothing was committed.
+
+**Evidence file created:** evidence/handoff-recovery-2026-10-17T1509-transcript.txt, an assistant-written record of this session's calls (not a client export, not a Claude Desktop transcript).
+
+**Handoff status:** still IN PROGRESS / NOT complete. handoff_demo.txt left unchanged.

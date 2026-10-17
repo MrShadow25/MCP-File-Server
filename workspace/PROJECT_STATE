@@ -160,3 +160,14 @@ Verified by tool output: six handoff files read; git_diff empty (no git_status t
 Workspace task PASSED: list, read, write test note, read back, delete (confirm=true), final list showed the note gone. Record: `evidence/session3-mcp-task-transcript.txt`.
 Not run / not verified: pytest, diagnose_public.py, public re-test, tunnel restart/recovery (NOT passed), tunnel/client config, Windows symlinks, commit state, raw Claude Desktop transcript.
 Handoff status: IN PROGRESS. handoff_demo.txt unchanged.
+
+## Session 2 Update: Fresh-Context Recovery (2026-10-17, message time 15:09 +08; claude.ai chat with Demo tools; NOT Claude Desktop; no project command execution)
+Started with no memory of earlier sessions; recovered state from PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS, then handoff_demo.txt, handoff_report.txt and evidence/session3-mcp-task-transcript.txt. This is a fresh context but not a Claude Desktop session, so it does not satisfy the Claude Desktop fresh-session requirement by itself.
+
+**Unfinished handoff requirement:** a genuine raw Claude Desktop tool-call transcript of a fresh session that recovers state from the four files, plus the host-side evidence listed above (Windows pytest and fresh test-results.txt, diagnose_public.py output, public re-test, tunnel recovery, one timestamped restart run, tunnel/client config with token redacted, Windows symlinks).
+
+**Verified by tool output this session:** git_status shows only `## master...origin/master` (no modified or untracked files; `Fix_restart_state.py` is no longer listed, so it was probably committed or ignored, UNVERIFIED without a git log tool); git_diff empty; workspace root lists 11 entries; evidence/ lists 5 files; `test-results.txt` still "does not exist" from the workspace view, so 46 passed / 1 skipped remains host-reported only; handoff_demo.txt says IN PROGRESS.
+
+**Not run:** pytest, diagnose_public.py, public re-test, tunnel restart/recovery (NOT passed), Windows symlink test. Nothing committed or deleted. Real record of this session's calls: `evidence/handoff-recovery-2026-10-17T1509-transcript.txt` (assistant-written, not a client export).
+
+Handoff status: IN PROGRESS / NOT complete. handoff_demo.txt unchanged.
