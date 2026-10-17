@@ -1,0 +1,25 @@
+# Design Decisions
+
+## 1. Python and MCP SDK
+Python keeps filesystem operations readable and testable. The project uses `MCPServer` and decorator-based tool/resource registration; documentation should not call this FastMCP unless the implementation changes.
+
+## 2. Workspace Restriction
+File tools resolve paths against the project-local workspace and reject paths resolving outside it. This reduces scope but does not eliminate TOCTOU races.
+
+## 3. Local and Remote Transport
+Stdio supports local desktop-client integration. Streamable HTTP supports remote MCP sessions and persistent request/session handling.
+
+## 4. Authentication Proxy and Tunnel
+A separate loopback proxy checks a bearer token before forwarding to the HTTP MCP server; the HTTPS tunnel provides external TLS access. The tunnel is currently separate from the process manager and its free URL may change. A single shared token lacks per-agent identity and must remain secret.
+
+## 5. File Tools and Efficiency
+`read_file` supports bounded line ranges and `search_files` caps returned matches to reduce context usage. `delete_file` requires explicit `confirm=True`. These are guardrails, not authorization by user role.
+
+## 6. Git Tools
+Git status and diff are read-only inspection tools. They depend on the project directory being a Git repository.
+
+## 7. Testing and Security Limitations
+The previously recorded baseline was 39 passed and 1 skipped, before recent tool changes. Rerun tests before relying on that result. Symlink behavior can be environment-dependent. Path checks cannot fully prevent TOCTOU races.
+
+## 8. Process Management
+The Windows-oriented `service_manager.py` starts and monitors the MCP server and proxy on loopback ports 8000 and 8001. Both started successfully in a recorded run; crash recovery remains unverified. The tunnel is not supervised by the manager.

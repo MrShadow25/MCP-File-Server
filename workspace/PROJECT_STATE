@@ -1,0 +1,89 @@
+# Project State
+
+## Project
+MCP File Server
+
+## Current Status
+The server supports local stdio and authenticated remote Streamable HTTP through a loopback proxy and HTTPS tunnel. The updated pytest suite (covering the bounded-read, search-cap, and delete-confirmation changes) has been run: 46 passed, 1 skipped, 0 failed (2026-10-17). This result comes from the user's own PowerShell run; it was NOT independently executed by Session 2 or by any MCP tool. The user reports saving the raw output to repository-root `test-results.txt`; that file is outside `workspace/` and has NOT been read or verified through MCP tools, so the user must confirm its contents locally. Public-session checks and the handoff transcript remain older evidence.
+
+## Implemented Features
+- Nine registered tools, including file operations and read-only Git inspection
+- Workspace path validation and symbolic-link checks
+- Bounded `read_file(path, offset=0, limit=200)` output
+- Capped `search_files(..., max_results=50)` output
+- Explicit `confirm=True` requirement for `delete_file`
+- Operation logging and protected log file
+- Local stdio and remote HTTP transport with bearer-token proxy
+- Recorded public connection and missing-token checks
+- Existing scripted two-session handoff evidence
+
+## Evidence
+- `test-results.txt`: 39 passed, 1 skipped is the previous baseline only [Session 1; superseded by Session 2: 46 passed, 1 skipped. The new result was reported from the user's PowerShell run and was not independently executed by Session 2. The user reports the file now holds the new output; unverified via MCP, so confirm locally.]
+- `deployment-test.txt`: two independent public sessions connected and returned the expected result
+- `handoff-transcript.txt`: scripted READY-to-COMPLETED exchange; not a substitute for the rubric's genuine agent task
+
+## Remaining Work
+1. DONE (reported from the user's PowerShell run; not independently executed by Session 2): updated pytest suite, 46 passed, 1 skipped, 0 failed. The user reports the output is saved to repository-root `test-results.txt`. Still to do: the user confirms locally that the file shows 46 passed, 1 skipped (not verifiable via MCP; the file is outside `workspace/`).
+2. Perform a genuine multi-step task across two fresh Claude Desktop sessions; Session 2 must read these handoff files first and append progress. Save the real tool-call transcript.
+3. DONE: MCP server and authentication proxy restarts verified; see workspace/PROCESS_MANAGER_RESTART_LOG.txt. Tunnel supervision remains untested.
+4. Verify current tunnel command/URL and client configuration.
+5. Review security/design report and Git history.
+
+## Audit Findings (Session 1, 2026-10-17)
+Audit performed through the `demo` MCP tools. Only results actually returned are recorded here.
+
+Verified this session:
+- `list_files` (workspace root) returned 5 files: CHECKPOINTS, DECISIONS, mcp_server.log, PLAN_LOG, PROJECT_STATE.
+- `read_file` succeeded on PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS. The four documents are mutually consistent on status, remaining work, and the "baseline test results are stale" caveat.
+- `read_file mcp_server.log` FAILED with "The operation log cannot be read." This matches the documented protected-log behavior.
+- `read_file test-results.txt` FAILED with "The file does not exist." from the workspace view.
+- `list_files ..` FAILED with "Access denied: path is outside the workspace." This is evidence the workspace boundary check works for directory listing.
+- `search_files` (queries: "confirm", "39 passed", "nine") only matched the four handoff documents. The "nine tools" claim matches the 9 tools exposed to this session (add, delete_file, git_diff, git_status, list_files, read_file, replace_in_file, search_files, write_file).
+- `git_status` returned: "No commits yet on master"; every project path is untracked (README.md, main.py, http_server.py, proxy_server.py, service_manager.py, src/, test/, test-results.txt, deployment-test.txt, handoff-transcript.txt, security_design_report.md, workspace/, etc.).
+- `git_diff` returned no output. That is expected, because there are no tracked files to diff.
+
+Inconsistencies and risks:
+1. Git history is empty. Nothing is committed, so the "meaningful Git milestone commits" requirement is currently unmet.
+2. Scope mismatch: file tools see only `workspace/` (5 files) while Git sees the whole repo. `test-results.txt`, `service_manager.py`, and the other project files could not be inspected via MCP tools. Their contents are NOT verified by this audit.
+3. The 39 passed / 1 skipped baseline remains stale; the updated pytest suite has not been run (this session has no tool that executes tests). [Session 1; superseded by Session 2: 46 passed, 1 skipped. Reported from the user's PowerShell run, not independently executed by Session 2.]
+4. `.idea/` is untracked and not confirmed ignored. Check `.gitignore` before the first commit.
+5. `mcp_server.log` is unreadable by design, so operation-log contents cannot be audited through MCP.
+
+Handoff status: AWAITING VERIFICATION BY A SEPARATE FRESH SESSION (Session 2). The two-session handoff is NOT complete.
+
+## Next Task for Session 2
+Start a fresh session, read PROJECT_STATE, PLAN_LOG, CHECKPOINTS, and DECISIONS first, then: (a) confirm you can see the Session 1 audit entries; (b) re-run `list_files`, `git_status`, and `git_diff` independently and compare with the findings above; (c) append a dated "Session 2" entry to PLAN_LOG stating whether the findings were reproduced; (d) update the Handoff checkpoint only if you can honestly confirm it.
+
+## Session 2 Verification (2026-10-17)
+**Important limitation:** this verification ran in the SAME conversation that contains Session 1's full history, so it is NOT a fresh-context session. It re-verifies facts against the live workspace but does not satisfy the "fresh session recovers state from files alone" requirement. The two-session handoff is therefore NOT marked complete.
+
+Independently verified (fresh tool calls this session):
+- PROJECT_STATE, PLAN_LOG, and CHECKPOINTS all contain the Session 1 audit content (read via `read_file`).
+- `list_files` again returned exactly the same 5 files as Session 1.
+- `git_status` again returned "No commits yet on master" with the same untracked set; `git_diff` again returned no output.
+
+Git ignore review (evidence limited to what tools returned):
+- `read_file .gitignore` FAILED ("The file does not exist") even though `git_status` lists `.gitignore` as untracked. File tools cannot reach the repo root. Its contents are UNVERIFIED.
+- `.idea/` appears as `??` in `git_status`. Untracked-and-listed means it is NOT currently ignored. Needs a `.idea/` rule before the first commit. (Inference from git output, not from reading `.gitignore`.)
+- `.venv/`: does not appear in `git_status`. This is consistent with either "ignored" or "does not exist"; cannot distinguish. UNVERIFIED.
+- Credentials / `.env` / token files: none appear in `git_status`, but ignored files are hidden, so this proves nothing. Files that could embed a bearer token or tunnel URL and ARE untracked and would be committed: `run_services.ps1`, `proxy_server.py`, `deployment-test.txt`, `test_public.py`, `test_public_mcp.py`, `test_public_tools.py`, `inspect_public_tools.py`, `handoff-transcript.txt`. Their contents are UNVERIFIED and must be reviewed for secrets before committing.
+- Generated files (`__pycache__/`, `.pytest_cache/`, logs): none visible in status; same ambiguity. `workspace/` is listed as one collapsed untracked directory, so whether `mcp_server.log` inside it is ignored cannot be determined.
+- `uv.lock` and `pyproject.toml` are normal to commit.
+- `list_files src` FAILED ("The path is not a directory"), confirming `src/` is outside the tools' scope.
+
+Missing evidence (nothing below was run or verified):
+1. Pytest: no tool here can execute commands. Needed: run `pytest` locally and save the real output to `test-results.txt` (the existing 39 passed / 1 skipped result predates the latest changes). [Session 2 same-conversation pass; superseded by a later Session 2 entry: 46 passed, 1 skipped. Reported from the user's PowerShell run, not independently executed by Session 2.]
+2. Process-manager restart: needed: run `service_manager.py`, kill a child process, capture the restart log lines. [Session 2 same-conversation pass; superseded: restart verified 2026-10-17, see PROCESS_MANAGER_RESTART_LOG.txt]
+3. Tunnel/client config: needed: current tunnel command and URL, plus the Claude Desktop MCP config entry, with the token redacted.
+4. Git commits: needed: fix `.gitignore`, scan for secrets, then make staged milestone commits.
+5. Real two-session transcript: needed: two genuinely fresh Claude Desktop sessions, with the real tool-call transcript saved.
+
+## Next Concrete Action
+Outside MCP: on the host machine, inspect `.gitignore` and add rules for `.idea/`, `.venv/`, `.env*`, `__pycache__/`, `.pytest_cache/`, and logs; grep the untracked files for the bearer token and tunnel URL; run `pytest` and save the output [Session 2 same-conversation pass; superseded: pytest was already run by the user, 46 passed, 1 skipped; the user confirms the saved output locally]. Then open a truly fresh Claude Desktop session, have it read the four handoff files, and save its real transcript.
+
+## Evidence Consistency Pass (2026-10-17, separate Claude.ai chat; NOT a Claude Desktop session)
+Done by an assistant in a separate chat that had the `demo` MCP tools but not the Session 2 raw tool-call records.
+- Labeled the historical pytest statements above as superseded (46 passed, 1 skipped, from the user's PowerShell run, not independently executed by Session 2).
+- Created `evidence/session2-transcript.txt` (inside `workspace/`) as a PLACEHOLDER only. The raw Session 2 tool-call records and the post-read recovery summary are UNAVAILABLE; the user must copy the real records out of Claude Desktop.
+- Not verified: contents of repo-root `test-results.txt`, restart behavior, tunnel/client config, Git commits, and whether Session 2 was a genuinely fresh context.
+Handoff status: still NOT complete.

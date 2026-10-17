@@ -1,0 +1,39 @@
+# Project Checkpoints
+
+## 1. MCP Server — COMPLETED
+- [x] Local stdio and remote HTTP transport implemented
+- [x] Nine tools registered
+
+## 2. Workspace Safety and Tool Efficiency — IMPLEMENTED; UPDATED TESTS PASSED (46 passed, 1 skipped)
+- [x] Workspace boundary and symbolic-link checks
+- [x] `read_file` supports `offset` and `limit`
+- [x] `search_files` supports `max_results`
+- [x] `delete_file` requires `confirm=True`
+- [x] Run updated tests for these changes — 46 passed, 1 skipped, 0 failed (from the user's PowerShell run, 2026-10-17; not independently executed by Session 2). The user reports the raw output is saved to repo-root `test-results.txt`; that file is outside `workspace/` and was NOT read through MCP, so the user must verify it locally
+- [ ] Windows symbolic-link behavior remains unverified where symlink creation is unavailable
+- [x] TOCTOU race documented as a limitation
+
+## 3. Remote Deployment — PARTIALLY VERIFIED
+- [x] HTTP transport and authenticated proxy
+- [x] Public HTTPS endpoint previously tested
+- [x] Missing-token request returned HTTP 401
+- [x] Both services started under `service_manager.py`
+- [x] Automatic MCP-server and authentication-proxy restarts verified 2026-10-17 (see `PROCESS_MANAGER_RESTART_LOG.txt`; tunnel supervision not tested)
+- [ ] Tunnel is separate from manager; verify current URL/configuration
+
+## 4. Handoff — SCRIPTED EXCHANGE ONLY; SESSION 1 AUDIT DONE, AWAITING SESSION 2 VERIFICATION
+- [x] Two independent MCP sessions connected in scripted demonstration
+- [x] Session 1 audit COMPLETED (2026-10-17): read all four handoff files, ran list/search/git tools, recorded findings in PROJECT_STATE and PLAN_LOG
+- [ ] Run genuine multi-step task across two fresh Claude Desktop sessions (Session 1 audit done; Session 2 pending)
+- [ ] AWAITING VERIFICATION by a separate fresh session (Session 2); two-session handoff is NOT complete
+- [x] Session 2 re-verification run 2026-10-17: state files, workspace listing, Git status/diff reproduced Session 1 findings. CAVEAT: same conversation as Session 1, so NOT a fresh-context session; does not satisfy the handoff requirement
+- [ ] Session 2 must read workspace handoff files first, independently reproduce the audit, and append updates
+- [ ] Save actual client tool-call transcript — `evidence/session2-transcript.txt` (inside `workspace/`) is a PLACEHOLDER only: raw tool-call records and the post-read recovery summary are UNAVAILABLE. The user must copy the real records from Claude Desktop
+
+## 5. Submission and Git — PENDING
+- [x] README and security/design report exist
+- [ ] Refresh `test-results.txt` after updated tests pass — user reports done; UNVERIFIED via MCP. Leave unticked until confirmed locally (e.g. `Get-Content test-results.txt -Tail 5` shows 46 passed, 1 skipped)
+- [x] Capture restart evidence (see `PROCESS_MANAGER_RESTART_LOG.txt`)
+- [ ] Review meaningful Git milestone commits
+- [ ] `.gitignore` unreadable via MCP; `.idea/` shows untracked (not ignored). Add `.idea/`, `.venv/`, `.env*`, caches, logs rules (verified only by inference from git_status)
+- [ ] Scan untracked scripts/logs for bearer token or tunnel URL before first commit (contents unverified)

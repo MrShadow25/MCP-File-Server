@@ -1,0 +1,89 @@
+# Plan Log
+
+## Completed
+- Implemented MCP server with nine tools and greeting resource.
+- Added workspace boundary checks, symlink checks, and operation logging.
+- Added read bounds, search result cap, and explicit delete confirmation.
+- Added HTTP transport and bearer-token proxy.
+- Recorded prior baseline of 39 passed and 1 skipped; this predates the latest tool changes.
+- Recorded public connection checks and missing-token rejection.
+- Added scripted two-session READY-to-COMPLETED transcript.
+- Added README and security/design report.
+
+## Remaining
+1. Run and record updated pytest tests.
+2. Execute genuine rubric-aligned multi-step work through two fresh Claude Desktop sessions; Session 2 reads workspace handoff files first and appends progress. Save actual tool-call transcript.
+3. DONE: MCP server and authentication proxy restarts verified; see workspace/PROCESS_MANAGER_RESTART_LOG.txt. Tunnel supervision remains untested.
+4. Confirm current HTTPS tunnel and client configuration.
+5. Finish Git history and repository checks last.
+
+## 2026-10-17 — Session 1 Audit Entry
+**Inspected:** workspace listing; PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS; mcp_server.log; test-results.txt; parent directory; Git status and diff; keyword searches ("confirm", "39 passed", "nine").
+
+**Done (tools actually called):** list_files x2, read_file x6, search_files x3, git_status x1, git_diff x1, replace_in_file x4 (PROJECT_STATE, PLAN_LOG, CHECKPOINTS x2; corrected from an earlier "x3"), plus 3 read-back read_file calls after writing. No files deleted; no destructive changes.
+
+**Results:**
+- The four handoff documents are consistent with each other.
+- Three calls failed, as follows: the operation log is unreadable (by design); `test-results.txt` does not exist from the workspace view; `list_files ..` was denied as outside the workspace (boundary check working).
+- Git: no commits yet, all project files untracked, empty diff.
+- The nine-tools claim matches the nine tools exposed to this session.
+- Not verified: contents of source files, test results, service restart behavior, tunnel URL. This session had no tool to run tests or commands, and file tools are scoped to `workspace/`.
+
+**Next steps:** (1) Session 2 independently reproduces this audit and appends its own entry. (2) Run the updated pytest suite and save actual output. (3) Verify service-manager restart. (4) Confirm tunnel URL/client config. (5) Check `.gitignore` covers `.idea/`, then make milestone commits.
+
+**Handoff status:** awaiting verification by a separate fresh session. Not complete.
+
+## 2026-10-17 — Session 2 Verification Entry (NOT a fresh-context session)
+**Caveat:** run in the same conversation as Session 1, so it had Session 1's context in memory. State was re-read from the files, but this does not count as independent fresh recovery.
+
+**Inspected:** PROJECT_STATE, PLAN_LOG, CHECKPOINTS; workspace listing; Git status/diff; `.gitignore` (unreachable); `src/` (unreachable); search for ".idea".
+
+**Tools called:** read_file x4 (3 state files + .gitignore, last one failed), list_files x2 (root ok; `src` failed), git_status x1, git_diff x1, search_files x1, replace_in_file x3 (this update). No deletions, no destructive changes.
+
+**Results:**
+- Session 1's updates are present in all three state files.
+- Workspace listing, Git status, and empty diff reproduced Session 1's findings exactly.
+- `.gitignore` cannot be read by the file tools. `.idea/` shows as untracked in Git, so it is not currently ignored.
+- `.venv/`, credential files, and generated-file exclusions are unverifiable from tool output. Several untracked scripts/logs may embed a token or tunnel URL and must be reviewed before any commit.
+- Not run or verified: pytest, restart test, tunnel/client config, Git commits. No tool here executes commands or reaches the repo root.
+
+**Next steps:** (1) On the host: fix `.gitignore` (`.idea/`, `.venv/`, `.env*`, caches, logs) and grep for secrets. (2) Run pytest, save real output. (3) Run the restart test and capture logs. (4) Record the tunnel URL and client config (token redacted). (5) Make milestone commits. (6) Run a genuinely fresh session and save its transcript.
+
+**Handoff status:** NOT complete. Facts re-verified; fresh-session recovery not demonstrated.
+
+## 2026-10-17 — Session 2 Entry: Pytest Run Recorded
+**Result recorded:** the updated pytest run is done: 46 passed, 1 skipped, 0 failed. This supersedes the stale 39 passed / 1 skipped baseline. The figure was supplied by the person running the project; this session has no tool that executes tests, so I did not run pytest myself and did not see the raw output.
+
+**What I verified (tool output only):**
+- Read PROJECT_STATE, PLAN_LOG and CHECKPOINTS first; all three contain the Session 1 and earlier Session 2 entries.
+- `list_files` (workspace root) returned exactly 5 files: CHECKPOINTS, DECISIONS, mcp_server.log, PLAN_LOG, PROJECT_STATE. This matches the "5 files" claim in the Session 1 audit.
+
+**Not verified:** the raw pytest output (`test-results.txt` is outside the workspace view), restart behavior, tunnel/client config, Git commits, and a genuine fresh-session handoff.
+
+**Next steps:** (1) Save the real pytest output to `test-results.txt` on the host. (2) Restart test and logs. (3) Tunnel/client config. (4) `.gitignore` fix, secret scan, milestone commits. (5) Genuine fresh-session handoff with saved transcript.
+
+**Handoff status:** still NOT complete.
+
+## 2026-10-17 — Evidence Consistency Pass (separate Claude.ai chat; NOT a fresh Claude Desktop session)
+**Caveat:** done by an assistant in a different chat from Sessions 1 and 2, with the `demo` MCP tools but without Session 2's raw tool-call records.
+
+**Changes made:**
+1. PROJECT_STATE: labeled the older "pytest not run" statements (Evidence line, Audit Findings item 3, Session 2 "Missing evidence" item 1, Next Concrete Action) as superseded by 46 passed, 1 skipped. The result comes from the user's PowerShell run and was not independently executed by Session 2.
+2. Heading change recorded: the previous Session 2 continuation changed the CHECKPOINTS section 2 heading from "UPDATED TESTS PENDING" to "UPDATED TESTS PASSED (46 passed, 1 skipped)". That went beyond what that prompt asked for.
+3. CHECKPOINTS: pytest evidence worded accurately (see that file).
+4. Created `evidence/session2-transcript.txt` inside `workspace/` as a PLACEHOLDER with UNAVAILABLE sections.
+
+**Unavailable / not verified:**
+- Raw Session 2 tool-call records (tool_search, the three reads, continuation calls, read-back results).
+- A recovery summary written after the three reads: none was provided, so it is recorded as MISSING.
+- Contents of repo-root `test-results.txt`: outside `workspace/`; the user must verify locally.
+
+**Handoff status:** still NOT complete.
+
+## 2026-10-17 — Restart Evidence Recorded (host-side evidence)
+**Evidence file:** `PROCESS_MANAGER_RESTART_LOG.txt` — the process manager's console output as provided by the user.
+**Shows:** MCP server (PID 5372) exited with code 4294967295 and was restarted as PID 17196 on port 8000; authentication proxy (PID 24240) exited and was restarted as PID 22524 on port 8001.
+**Supporting file:** `PROCESS_MANAGER_RESTART_TRANSCRIPT.txt` is a PowerShell transcript of killing the process listening on port 8001 (PID 22828). Its PID does not match the PIDs in the log, so it records a separate run; the two are not one continuous experiment.
+**Not tested:** tunnel supervision (the tunnel is not managed by `service_manager.py`).
+**Not independently verified by an MCP tool:** these files were created on the host; the assistant tools only read them as workspace text.
+**Handoff status:** still NOT complete.

@@ -1,0 +1,28 @@
+**********************
+Windows PowerShell transcript start
+Start time: 20261017082224
+Username: DESKTOP-D0TQNQF\Admin
+RunAs User: DESKTOP-D0TQNQF\Admin
+Configuration Name:
+Machine: DESKTOP-D0TQNQF (Microsoft Windows NT 10.0.19045.0)
+Host Application: powershell.exe -NoExit -File C:/Users/Admin/PycharmProjects/MCP Server/.venv/Scripts/activate.ps1
+Process ID: 17504
+PSVersion: 5.1.19041.7802
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.19041.7802
+BuildVersion: 10.0.19041.7802
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is .\workspace\PROCESS_MANAGER_RESTART_TRANSCRIPT.txt
+PS C:\Users\Admin\PycharmProjects\MCP Server> Get-NetTCPConnection -LocalPort 8001 -State Listen |
+    Select-Object -ExpandProperty OwningProcess
+22828
+PS C:\Users\Admin\PycharmProjects\MCP Server> Stop-Process -Id 22828
+PS C:\Users\Admin\PycharmProjects\MCP Server> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20261017082331
+**********************
