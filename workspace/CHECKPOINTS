@@ -90,3 +90,31 @@
 - [ ] Commit the reviewed state files (uncommitted per git_diff; no commit tool available)
 - [ ] Save a real Claude Desktop transcript; evidence/session2-transcript.txt is still a placeholder
 - [ ] handoff_demo.txt must stay IN PROGRESS until the host-side items above are done and checked
+
+## Session 2 (new conversation, claude.ai chat with Demo tools; NOT Claude Desktop) - 2026-10-17
+- [x] Read PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS, handoff_report.txt and wrote a recovery summary before verification. Caveats: tool_search first; reads were one per call, not one parallel batch; `list_files workspace` failed because the tool root is the workspace itself
+- [x] git_status re-run: `master...origin/master`, only `Fix_restart_state.py` untracked; git_diff empty. State files and evidence/ no longer show as modified/untracked, so earlier "uncommitted" items are probably stale (inference; no git log tool, commit hashes and remote contents UNVERIFIED)
+- [x] handoff_demo.txt confirmed IN PROGRESS; left unchanged
+- [x] evidence/ now holds session-tool-call-log.txt and session2-fresh-transcript.txt. Read: session2-fresh-transcript.txt is a SUMMARY (self-declared, unverified counts), not a raw transcript. session-tool-call-log.txt (read 300 of 710 lines) is a server operation log without arguments or results; it looks like automated test runs (inference) and is NOT a Claude Desktop transcript
+- [ ] Raw Claude Desktop tool-call transcript still missing; evidence/session2-transcript.txt remains a placeholder (not re-read)
+- [ ] Pytest: not run here (no command-execution tool); all figures second-hand; repo-root test-results.txt unreadable via MCP
+- [ ] Tunnel/client config: not verified
+- [ ] Tunnel restart/recovery test: NOT run, NOT passed
+- [ ] Public re-test and diagnose_public.py output: not run
+- [ ] Windows symlink behaviour: unverified
+- [ ] Confirm commit state on the host with git log; decide on untracked Fix_restart_state.py
+- [ ] handoff_demo.txt must stay IN PROGRESS until the host-side items and a real raw transcript exist
+
+## Session 2 continuation: submission-evidence audit - 2026-10-17 (no command execution available; nothing run)
+- [ ] Windows `pytest -q`: NOT RUN this session; test-results.txt not created or changed. Run on the host, then check with `Get-Content test-results.txt -Tail 5`
+- [ ] `diagnose_public.py`: not visible from `workspace/` (read_file: file does not exist from the workspace view); host existence unverified; NOT run. Check `Test-Path .\diagnose_public.py`, then run and keep the output
+- [x] Read-only inspection of PROCESS_MANAGER_RESTART_LOG.txt (7 lines) and PROCESS_MANAGER_RESTART_TRANSCRIPT.txt (28 lines) completed
+- [ ] Restart evidence is partial: the log shows both children restarting (no timestamps); the transcript kills PID 22828, which matches neither log PID, so they are separate runs. Capture one timestamped run with the kill and restart lines together
+- [ ] Tunnel command/URL: none recorded in workspace/. Tunnel restart/recovery test NOT run and NOT passed
+- [ ] Public-endpoint re-test with current code and a saved transcript
+- [ ] Live remote Claude Desktop connection (client is configured for local stdio)
+- [ ] Real raw Claude Desktop tool-call transcript (placeholder/summary/operation-log files are not transcripts)
+- [ ] Windows symlink behaviour (skipped)
+- [ ] Commit reviewed state files and decide on untracked Fix_restart_state.py. Nothing committed by this session; ask the user first
+- [ ] PROJECT_STATE "no remote configured" is stale (git_status shows master...origin/master); whether anything was pushed is unverified
+- [ ] handoff_demo.txt stays IN PROGRESS (not touched)

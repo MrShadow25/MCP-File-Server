@@ -156,3 +156,52 @@
 **Not done:** PROCESS_MANAGER_RESTART_TRANSCRIPT.txt and evidence/session2-transcript.txt were not read or changed. The placeholder was not replaced because I have no real Claude Desktop tool-call records.
 
 **Handoff status:** still NOT complete. handoff_demo.txt stays IN PROGRESS. Remaining, all host-side: Windows pytest and fresh test-results.txt, diagnose_public.py and public re-test, tunnel recovery test, review and commit the state files, and save a real Claude Desktop transcript.
+
+## 2026-10-17 - Session 2 (new conversation; claude.ai chat with Demo MCP tools, NOT Claude Desktop)
+**Context:** this conversation began with no memory of earlier sessions; state was recovered from the files. It is a separate chat from the earlier Session 2 passes, but it is NOT a Claude Desktop session, so it does not by itself satisfy a "genuine Claude Desktop fresh session" requirement. Read order caveat: tool_search ran first, `list_files workspace` failed (the tool root IS the workspace, so `workspace/X` maps to `X`), then the five files were read one per call, not as one parallel batch. A recovery summary was written before the verification calls.
+
+**Read first, all succeeded:** PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS, handoff_report.txt.
+
+**Verified by tool output this session:**
+- git_status: `## master...origin/master`, with only `Fix_restart_state.py` untracked. git_diff: no output. The state files, handoff_demo.txt and workspace/evidence no longer show as modified or untracked, which contradicts earlier "uncommitted" entries. Inference: they were committed since. I have no git log tool, so I cannot confirm commit hashes, whether new commits exist beyond 016ed85 and 3b59308, or whether the remote actually holds them. A remote/upstream is now configured, which earlier entries said was missing.
+- handoff_demo.txt reads Status: IN PROGRESS (3 lines); left unchanged.
+- list_files (root) returned 11 entries (10 files and the evidence/ directory): CHECKPOINTS, DECISIONS, evidence/, handoff_demo.txt, handoff_report.txt, mcp_server.log, PLAN_LOG, PROCESS_MANAGER_RESTART_LOG.txt, PROCESS_MANAGER_RESTART_TRANSCRIPT.txt, PROJECT_STATE, search_test.md.
+- list_files evidence returned 4 files: handoff-transcript-FAILED-2026-10-17T1149.txt, session-tool-call-log.txt, session2-fresh-transcript.txt, session2-transcript.txt (placeholder, not re-read).
+- evidence/session2-fresh-transcript.txt (read, 62 lines): a SUMMARY of a prior fresh-context Session 2 (task prompt, reported tool counts, reported changes). It states itself that it is not a raw transcript and that its counts are unverified. It is not a raw transcript and I do not treat it as one.
+- evidence/session-tool-call-log.txt (read lines 1-300 of 710): operation-log lines ("Tool called/completed/failed") with no arguments or results. Millisecond spacing and repeated add/list/write/read/delete sequences look like automated test-suite runs (inference). It is NOT a Claude Desktop conversation transcript. Lines 301-710 were not read.
+
+**Not verified (nothing run; this session has no command-execution tool):** pytest (46 passed / 1 skipped Windows and 55 passed / 2 failed Linux are second-hand; repo-root test-results.txt is unreadable from here); tunnel/client configuration; **tunnel restart/recovery test has NOT been run and has NOT passed**; public endpoint re-test; Windows symlink behaviour; diagnose_public.py output; whether a real raw Claude Desktop tool-call transcript exists.
+
+**Not done:** PROCESS_MANAGER_RESTART_TRANSCRIPT.txt, evidence/session2-transcript.txt and lines 301-710 of session-tool-call-log.txt were not read. No transcript was created or replaced. Fix_restart_state.py (untracked, outside tool scope) was not inspected.
+
+**Handoff status:** still NOT complete. handoff_demo.txt stays IN PROGRESS. Remaining, host-side: Windows pytest and fresh test-results.txt; diagnose_public.py and public re-test; tunnel restart/recovery test; verify tunnel/client config with token redacted; decide on Fix_restart_state.py; confirm commit state with git log on the host; save a real raw Claude Desktop transcript.
+
+## 2026-10-17 - Session 2 continuation: submission-evidence audit (claude.ai chat with Demo tools; no command execution)
+**Scope limit, stated up front:** the Demo file tools are confined to `workspace/`, and this session's only other execution environment is a Linux sandbox (uname: Linux) that does not contain this project, `pytest`, `ngrok`, `service_manager.py` or `diagnose_public.py`. Therefore NO test, diagnostic, restart or tunnel command was run this session. Nothing below is a test result.
+
+**Requested task outcomes:**
+- Windows test suite: NOT RUN (no Windows execution available). `test-results.txt` was NOT created or modified. The existing 46 passed / 1 skipped (Windows, user-run) and 55 passed / 2 failed (Linux repair run) figures remain second-hand. The 56 passed / 1 skipped figure in CHECKPOINTS is an expectation, not a result.
+- `diagnose_public.py`: `read_file diagnose_public.py` returned "The file does not exist" from the workspace view. That means only that it is not inside `workspace/`; the repair entry says it was created in the repo, so it may exist on the host. Existence on the host is UNVERIFIED and it was NOT run. No result exists.
+- Tunnel / process manager inspection (read-only): read PROCESS_MANAGER_RESTART_LOG.txt (7 lines) and PROCESS_MANAGER_RESTART_TRANSCRIPT.txt (28 lines). The search for "ngrok" matched only PLAN_LOG line 113 and PROJECT_STATE line 114; the workspace holds no tunnel command, tunnel configuration, or tunnel log.
+
+**What the inspected evidence does and does not show:**
+- Restart log: MCP server PID 5372 exited with code 4294967295 and restarted as 17196; auth proxy PID 24240 exited with the same code and restarted as 22524; each restart was announced "in 2 seconds". This is real evidence the manager restarts both children. Limits: no timestamps, and the log does not show what ended the processes.
+- PowerShell transcript (started 2026-10-17 08:22:24, ended 08:23:31): finds the listener on port 8001 as PID 22828 and runs `Stop-Process -Id 22828`. PID 22828 matches neither PID in the restart log, and the transcript contains no manager output. The two files therefore record separate runs (already noted in an earlier entry); this session found no evidence linking them.
+- **Tunnel restart/recovery: NOT tested and NOT passed.** The tunnel is separate from `service_manager.py` and is not supervised (DECISIONS item 4 and 8).
+
+**Evidence still missing for submission (each needs the host):**
+1. Fresh Windows `pytest -q` output saved to `test-results.txt`, then confirm with `Get-Content test-results.txt -Tail 5`.
+2. `diagnose_public.py` output (first confirm the file exists with `Test-Path .\diagnose_public.py`).
+3. Public-endpoint re-test with the current code and a saved transcript.
+4. A tunnel kill-and-restart test with captured before/after output, plus the tunnel command and URL (token redacted).
+5. A timestamped restart run where the kill and the manager's restart lines are captured together (the current log and transcript do not match).
+6. A real raw Claude Desktop tool-call transcript. evidence/session2-transcript.txt is a placeholder; evidence/session2-fresh-transcript.txt is a summary; evidence/session-tool-call-log.txt is a server operation log. None is a conversation transcript.
+7. Live remote Claude Desktop connection: the configured client uses local stdio (PROJECT_STATE 10:47 update), so a remote connection from the client is unverified.
+8. Windows symlink behaviour (test skipped).
+9. Commit state: git_status now shows PLAN_LOG and CHECKPOINTS modified (my earlier edits) and Fix_restart_state.py untracked; this entry adds PROJECT_STATE. Commit hashes beyond 016ed85 and 3b59308 are unverified. Nothing was committed by this session; a commit needs the user's go-ahead.
+
+**Stale statement noticed:** PROJECT_STATE says "GitHub publication (no remote configured)". git_status shows `master...origin/master`, which indicates an upstream is configured. Whether anything was pushed is unverified.
+
+**Tools called before this entry:** git_status x1, list_files x1 (failed: not a directory), read_file x3 (diagnose_public.py failed; two restart files read), search_files x2, bash_tool x1 (environment check only). Edit and read-back calls follow and are listed in the final reply.
+
+**Handoff status:** still NOT complete. handoff_demo.txt stays IN PROGRESS and was not touched.

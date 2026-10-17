@@ -132,3 +132,25 @@ Handoff status: still NOT complete.
 ### Not complete
 - Genuine fresh-session handoff transcript. `workspace/evidence/session2-transcript.txt` is a PLACEHOLDER and must not be presented as a real transcript.
 - GitHub publication (no remote configured).
+
+## Session 2 Continuation: Submission-Evidence Audit (2026-10-17; no command execution available)
+**Nothing was run this session.** The Demo file tools are confined to `workspace/`; the only other environment was a Linux sandbox without this project, `pytest`, `ngrok` or the project scripts. No test result, diagnostic output or restart result was produced. `test-results.txt` was not created or modified.
+
+### Read-only findings (tool output this session)
+- `diagnose_public.py`: `read_file` says the file does not exist from the workspace view. This does not show it is missing from the repo; host existence is unverified and it was not run.
+- Restart log (7 lines): MCP server PID 5372 restarted as 17196; auth proxy PID 24240 restarted as 22524; no timestamps; cause of exit not shown.
+- PowerShell transcript (08:22:24 to 08:23:31): `Stop-Process` on port-8001 listener PID 22828. This PID matches neither log PID, so the two files are separate runs and are not one continuous experiment.
+- No tunnel command, configuration or log exists in `workspace/`. `git_status`: `master...origin/master`, PLAN_LOG and CHECKPOINTS modified (uncommitted), `Fix_restart_state.py` untracked. The "no remote configured" line above is stale; whether anything was pushed is unverified.
+
+### Still missing for submission (all need the host)
+1. Fresh Windows `pytest -q` output saved to `test-results.txt` and confirmed locally. Existing figures (46 passed / 1 skipped Windows; 55 passed / 2 failed Linux) are second-hand; "56 passed" is an expectation only.
+2. `diagnose_public.py` existence check and output.
+3. Public re-test with current code and a saved transcript.
+4. Tunnel restart/recovery test: NOT run, NOT passed. Tunnel is not supervised by `service_manager.py`.
+5. One timestamped restart run with the kill and restart lines captured together.
+6. Real raw Claude Desktop tool-call transcript (placeholder, summary and operation-log files are not transcripts).
+7. Live remote Claude Desktop connection (client uses local stdio).
+8. Windows symlink behaviour (skipped).
+9. Commit of reviewed state files; decision on `Fix_restart_state.py`. Nothing committed by this session.
+
+Handoff status: still NOT complete. handoff_demo.txt stays IN PROGRESS (not touched).
