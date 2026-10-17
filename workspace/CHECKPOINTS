@@ -50,7 +50,7 @@
 - [ ] Review final Git diff, stage only intended files, and commit the documentation/state updates.
 - [ ] Windows symbolic-link behavior remains unverified because the test was skipped.
 
-## 2026-10-17 — Public MCP retest (10:47 +08)
+## 2026-10-17 â€” Public MCP retest (10:47 +08)
 - [x] Public MCP connection and initialization verified for two independent sessions.
 - [x] All 9 tools discovered in both sessions.
 - [x] Cross-session task handoff verified through COMPLETED status.
@@ -69,3 +69,24 @@
 - [ ] Tunnel restart/recovery test
 - [ ] Genuine fresh Claude Desktop handoff transcript (placeholder file is NOT evidence)
 - [ ] GitHub remote created and pushed
+
+## Session 2 (handoff_report.txt task) - 2026-10-17
+- [x] Read PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS, handoff_report.txt before other work; recovery summary written. CAVEAT: same conversation as Session 1, so NOT a fresh-context session
+- [x] Encoding blocker from handoff_report.txt (0x97) is resolved: read_file succeeded on PROJECT_STATE, PLAN_LOG, CHECKPOINTS this session (cause not investigated)
+- [x] git_status re-run: state files and handoff_demo.txt show as modified; handoff_report.txt, workspace/evidence/ and Fix_restart_state.py untracked
+- [ ] `PROCESS_MANAGER_RESTART_LOG.txt` cannot be read via MCP (error: byte 0xff at position 0, likely UTF-16 with BOM; inference only); its contents and the PIDs quoted in PLAN_LOG are unverified by this session
+- [ ] Pytest, tunnel/client config, tunnel recovery, public re-test: not run (no command-execution tool); earlier figures are second-hand
+- [ ] Commit the reviewed state files (currently uncommitted)
+- [ ] handoff_demo.txt stays IN PROGRESS; set COMPLETED only after host-side evidence and a genuinely fresh session transcript exist
+
+## Session 2 (fresh context) - 2026-10-17
+- [x] Read PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS, handoff_report.txt first and wrote a recovery summary. Caveat: tool_search came first and PROJECT_STATE was read alone before the other four were batched, so the one-batch rule was not met exactly
+- [x] handoff_report.txt 3a (undecodable state files) is out of date: all three read fine; I trust my live reads. git_diff shows corrupt dash characters replaced by em dashes (uncommitted)
+- [x] PROCESS_MANAGER_RESTART_LOG.txt is now readable via MCP: 7 lines, PIDs 5372 -> 17196 (MCP server) and 24240 -> 22524 (auth proxy), both exit code 4294967295. Supersedes the earlier "unreadable" item above. Does not show the kills or tunnel behaviour
+- [x] handoff_demo.txt confirmed IN PROGRESS; left unchanged
+- [x] git_diff reviewed: uncommitted changes in the three state files, handoff_demo.txt and the restart log (binary change vs committed copy)
+- [ ] Pytest: not run (no command-execution tool); all figures are second-hand
+- [ ] Tunnel/client config, tunnel recovery, public re-test, Windows symlinks: not verified
+- [ ] Commit the reviewed state files (uncommitted per git_diff; no commit tool available)
+- [ ] Save a real Claude Desktop transcript; evidence/session2-transcript.txt is still a placeholder
+- [ ] handoff_demo.txt must stay IN PROGRESS until the host-side items above are done and checked

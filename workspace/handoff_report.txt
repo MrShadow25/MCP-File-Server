@@ -1,0 +1,61 @@
+MCP HANDOFF REPORT - SESSION 1
+Date: 2026-10-17
+Status: IN PROGRESS (Session 1 finished its part; Session 2 has NOT been done by this session)
+
+1. TASK
+Session 1 of a two-session MCP handoff demonstration: inspect the workspace state
+files, write a handoff report, update the handoff state, verify the changes, and
+leave the task in progress for a later session. No server source code was modified
+and nothing was deleted.
+
+2. WHAT WAS INSPECTED (via Demo MCP tools)
+- list_files (workspace root and evidence/)
+- read_file: DECISIONS            -> read OK (8 design decisions)
+- read_file: handoff_demo.txt     -> read OK (3 lines; it said Status: COMPLETED)
+- read_file: evidence/handoff-transcript-FAILED-2026-10-17T1149.txt
+                                  -> read OK (records "MCPError: Not Found")
+- read_file: evidence/session2-transcript.txt
+                                  -> read OK (self-described PLACEHOLDER, incomplete)
+- search_files: query "Status"    -> works, but skips files it cannot decode
+- git_status                      -> branch master; untracked: Fix_restart_state.py,
+                                     workspace/evidence/
+
+3. PROBLEMS FOUND (stated honestly)
+a) PROJECT_STATE, PLAN_LOG and CHECKPOINTS could NOT be read. read_file failed on
+   each with: 'utf-8' codec can't decode byte 0x97 (offsets 11592, 8724, 4199).
+   Byte 0x97 is an em dash in Windows-1252, so these files are probably not valid
+   UTF-8. search_files skips them silently. Their contents are therefore UNVERIFIED
+   by this session, and they were NOT modified (write_file would overwrite them
+   without my being able to see the old content).
+b) handoff_demo.txt said "Status: COMPLETED / Next action: Mark the task completed."
+   That contradicts a Session 1 that must stay in progress, so it was corrected
+   (see section 5).
+c) The evidence/ folder already refers to a "Session 2" and to an earlier failed
+   handoff run. session2-transcript.txt says its raw tool-call records are
+   UNAVAILABLE. Whether Session 2 truly ran as a fresh session is UNPROVEN, so
+   nothing here treats it as completed.
+d) The pytest figures quoted in that evidence (46 passed, 1 skipped) are second-hand.
+   Session 1 ran no tests and cannot execute them.
+
+4. WHAT REMAINS
+- Resolve the encoding problem so PROJECT_STATE, PLAN_LOG and CHECKPOINTS can be
+  read and updated (needs the host machine, e.g. re-save as UTF-8 after backing up).
+- Update those three files with accurate Session 1 progress once readable.
+- Run pytest on the host and save the real output.
+- Run the process-manager restart test and save the log.
+- Replace the placeholder Session 2 transcript with real tool-call records.
+- Decide whether the untracked files should be committed or ignored.
+
+5. CHANGES MADE BY SESSION 1
+- CREATED  handoff_report.txt (this file)
+- MODIFIED handoff_demo.txt (Status changed from COMPLETED to IN PROGRESS)
+- NOT CHANGED: PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS, evidence/*, server code
+
+6. INSTRUCTIONS FOR SESSION 2
+Before doing anything else:
+  1. Load the MCP tools (tool_search) and read handoff_demo.txt and this file.
+  2. Try read_file on PROJECT_STATE, PLAN_LOG, CHECKPOINTS, then DECISIONS. If the
+     first three still fail to decode, stop and fix the encoding first.
+  3. Write a short recovery summary of what Session 1 did and did not do.
+  4. Only then continue with section 4. Do not mark the task completed until
+     real evidence (test output, restart log, genuine transcript) exists.

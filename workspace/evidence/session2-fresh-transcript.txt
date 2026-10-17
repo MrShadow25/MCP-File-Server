@@ -1,0 +1,62 @@
+# Session 2 — Fresh Context Handoff Transcript
+
+**Project:** MCP File Server
+**Session type:** Fresh-context handoff verification
+**Client:** Claude Desktop
+**MCP server:** Demo
+**Purpose:** Resume work using workspace state files without relying on the previous chat's memory.
+
+## Initial Instruction
+
+You are Session 2 of a multi-session project on an MCP file server. You have no memory of earlier sessions; all context is in the workspace files.
+
+Rules:
+
+1. Before anything else, read PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS and handoff_report.txt, in that order, as ONE batch of five parallel read_file calls. Do not read anything else first.
+2. After the reads, and before any other work, write a short recovery summary: what was done, what is unverified, and what remains.
+3. Then complete whatever handoff_report.txt still asks for that the MCP tools can do. Use search_files instead of reading whole files when you only need one fact, and never repeat a call without new information.
+4. Do not claim anything is verified unless a tool result in this session shows it. You cannot run tests, so say so. If handoff_report.txt contradicts a state file, say which one you trust and why.
+5. Append a dated "Session 2 (fresh context)" entry to PLAN_LOG and tick or add items in CHECKPOINTS. Read a file before you edit it, and re-read the changed part afterwards.
+6. Set handoff_demo.txt to COMPLETED only if every step in the report that the tools can do is done and checked.
+7. Finish with a table of every tool call you made (name and count), what changed, and what is still open.
+
+## Session 2 Results
+
+The assistant reported that it used the Demo integration and read the workspace state files. It acknowledged a deviation from Rule 1: PROJECT_STATE was read in an individual call before the other four files were read together.
+
+The assistant reported that both appended entries read back correctly. It left handoff_demo.txt marked IN PROGRESS because host-side steps could not be completed or verified using the available MCP tools.
+
+### Reported Tool Call Counts
+
+| Tool | Calls | Reported purpose |
+|---|---:|---|
+| tool_search | 1 | Loaded the available Demo tools |
+| read_file | 9 | Read handoff files, inspected additional files, and checked read-backs |
+| list_files | 2 | Listed the workspace root and evidence directory |
+| git_diff | 1 | Inspected uncommitted changes |
+| replace_in_file | 2 | Appended entries to PLAN_LOG and CHECKPOINTS |
+
+**Reported total:** 15 tool calls.
+
+These counts are transcribed from the assistant's final response and have not been independently verified against raw tool logs.
+
+## Reported Changes
+
+- PLAN_LOG: appended a dated "Session 2 (fresh context)" entry.
+- CHECKPOINTS: appended a "Session 2 (fresh context)" section with completed and open items.
+- handoff_demo.txt: unchanged and left IN PROGRESS.
+- The assistant reported uncommitted changes involving the state files, handoff_demo.txt, and the restart log.
+
+## Reported Verification and Limitations
+
+- The assistant reported that PROJECT_STATE, PLAN_LOG, and CHECKPOINTS were readable despite a previous report claiming they could not be decoded.
+- The assistant reported that PROCESS_MANAGER_RESTART_LOG.txt contained seven lines and recorded server and proxy process ID changes.
+- The assistant did not run tests. Previously reported test results remain second-hand and were not independently verified in this session.
+- Public tunnel recovery and re-testing, client configuration, Windows symbolic-link behavior, Git commits, and the saved client transcript remained open.
+- The assistant reported that it did not read the restart transcript or the existing transcript placeholder.
+- The assistant acknowledged that the five initial reads were not performed in one parallel batch.
+
+## Evidence Status
+
+This file records the Session 2 summary supplied in the conversation. It is not a complete raw transcript of every MCP tool call. Individual tool inputs and outputs must be captured separately from the Claude Desktop interface if required by the assignment rubric.
+

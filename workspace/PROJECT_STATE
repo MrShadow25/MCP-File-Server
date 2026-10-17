@@ -110,7 +110,7 @@ Handoff status: still NOT complete.
 4. Perform the genuine fresh-session handoff if the required client is available.
 5. Commit the reviewed documentation and handoff updates.
 
-### Update — 2026-10-17 10:47 +08
+### Update â€” 2026-10-17 10:47 +08
 - Public ngrok tunnel URL confirmed active through the local ngrok API.
 - Public GET /mcp returned HTTP 200 without a bearer token; this confirms HTTP reachability only.
 - Public MCP test passed in two independent sessions; all 9 tools were discovered in both, and Session 2 completed Session 1's handoff task.

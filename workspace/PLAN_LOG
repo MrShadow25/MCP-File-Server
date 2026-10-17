@@ -97,7 +97,7 @@
 - Still unverified: current tunnel/client configuration, tunnel recovery, and a genuine fresh-session handoff transcript.
 - Next: update PROJECT_STATE and CHECKPOINTS, then verify Git status and review the final submission evidence.
 
-## 2026-10-17 10:47 +08 — Public MCP retest
+## 2026-10-17 10:47 +08 â€” Public MCP retest
 - PASS: Two independent public MCP sessions initialized successfully.
 - PASS: All 9 tools were discovered in both sessions.
 - PASS: Session 2 recovered the READY task, marked it COMPLETED, and verified the final state.
@@ -117,3 +117,42 @@
 **Evidence preserved, not altered:** the failed 11:49 run is saved as `workspace/evidence/handoff-transcript-FAILED-2026-10-17T1149.txt`; the last passing transcript (10:47:37) was restored as `handoff-transcript.txt`; `PROCESS_MANAGER_RESTART_LOG.txt` was restored from Git (it had been deleted from the working tree).
 
 **Still not done:** public endpoint re-test on the host; tunnel restart/recovery; genuine fresh Claude Desktop session transcript; GitHub publication.
+
+## 2026-10-17 - Session 2 (handoff_report.txt task; NOT a fresh-context session)
+**Caveat:** run in the same conversation as Session 1 (the author of handoff_report.txt), so it had that context in memory. State was re-read from files first, but this does not demonstrate fresh-session recovery.
+
+**Read first (all succeeded):** PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS, handoff_report.txt. The first read (PROJECT_STATE) was issued alone and the other four in a second batch, rather than all five in one batch.
+
+**Verified by tool output this session:**
+- PROJECT_STATE, PLAN_LOG and CHECKPOINTS now decode as UTF-8 (read_file succeeded on all three). This resolves handoff_report.txt problem 3a, which is now out of date. The cause of the earlier 0x97 failure was not investigated.
+- git_status shows workspace/CHECKPOINTS, PLAN_LOG, PROJECT_STATE and handoff_demo.txt as modified (uncommitted); Fix_restart_state.py, workspace/evidence/ and workspace/handoff_report.txt are untracked. The state edits are therefore not yet committed.
+- handoff_demo.txt read OK and says IN PROGRESS.
+
+**Could not verify:**
+- PROCESS_MANAGER_RESTART_LOG.txt: read_file failed ("can't decode byte 0xff in position 0"), which suggests a UTF-16 file with a byte-order mark; this is an inference. The PIDs quoted in the Restart Evidence entry above are therefore NOT independently confirmed by this session. search_files for "restarted" matched only PLAN_LOG.
+- Pytest: no tool here executes commands. The 46 passed / 1 skipped (Windows, user-reported) and 55 passed / 2 failed (Linux repair run, expected Windows-path failures) figures are second-hand.
+- Tunnel/client config, tunnel recovery, public endpoint with the new code, Windows symlinks, and the latest Git commits.
+
+**Tools called before writing this entry:** read_file x7 (1 failed: the restart log), git_status x1, search_files x1. Edits and read-back calls follow and are listed in the final reply.
+
+**Handoff status:** still NOT complete. handoff_demo.txt stays IN PROGRESS. Remaining: host-side Windows pytest, diagnose_public.py and public re-test, tunnel recovery test, convert or re-save the restart log if MCP readability is wanted, commit the reviewed state files, and run a genuinely fresh Claude Desktop session with its real transcript saved.
+
+## 2026-10-17 - Session 2 (fresh context)
+**Context:** this session started with no memory of earlier sessions and recovered state from the files. Caveat on the read order: the tool-loading step (tool_search) came first, and PROJECT_STATE was read in a call of its own before the other four reads were batched, so the five-reads-in-one-batch rule was not met exactly. Whether this counts as the genuine Claude Desktop fresh session the project needs is for the user to judge; this entry is not a saved client transcript.
+
+**Read first, all succeeded:** PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS, handoff_report.txt. A recovery summary was written before any other work.
+
+**Which file I trust:** handoff_report.txt (section 3a) says PROJECT_STATE, PLAN_LOG and CHECKPOINTS cannot be decoded as UTF-8. All three read fine this session, so I trust my live reads and treat 3a as out of date. git_diff supports this: it shows the corrupt "?" dash characters in those files replaced by proper em dashes in the working tree (uncommitted). The report's other points (placeholder transcript, second-hand pytest figures) still stand.
+
+**Verified by tool output this session:**
+- handoff_demo.txt reads "Status: IN PROGRESS" (3 lines).
+- list_files (workspace root) returned: CHECKPOINTS, DECISIONS, evidence/, handoff_demo.txt, handoff_report.txt, mcp_server.log, PLAN_LOG, PROCESS_MANAGER_RESTART_LOG.txt, PROCESS_MANAGER_RESTART_TRANSCRIPT.txt, PROJECT_STATE, search_test.md.
+- list_files evidence returned two files: handoff-transcript-FAILED-2026-10-17T1149.txt and session2-transcript.txt (the placeholder).
+- PROCESS_MANAGER_RESTART_LOG.txt is NOW readable through MCP (7 lines). It lists: MCP server PID 5372 started, auth proxy PID 24240 started, MCP server exited with code 4294967295 and restarted as PID 17196, auth proxy exited with code 4294967295 and restarted as PID 22524. This matches the PIDs quoted in the Restart Evidence entry above and supersedes the earlier "unreadable" note. git_diff reports the file as a binary change versus the committed copy, consistent with it having been re-saved in a different encoding (inference). The log shows the restarts but not the kills, and it does not show that the two runs were one experiment; the separate transcript file was not read by me.
+- git_diff (the tool loaded for me) shows uncommitted changes to CHECKPOINTS, PLAN_LOG, PROJECT_STATE, handoff_demo.txt and the restart log. I did not have git_status, so untracked files were not re-checked.
+
+**Not verified (no command-execution tool; nothing run):** pytest results (46 passed / 1 skipped Windows, 55 passed / 2 failed Linux are second-hand), tunnel and client configuration, tunnel recovery, public endpoint with the new code, Windows symlink behaviour, whether the state files are committed.
+
+**Not done:** PROCESS_MANAGER_RESTART_TRANSCRIPT.txt and evidence/session2-transcript.txt were not read or changed. The placeholder was not replaced because I have no real Claude Desktop tool-call records.
+
+**Handoff status:** still NOT complete. handoff_demo.txt stays IN PROGRESS. Remaining, all host-side: Windows pytest and fresh test-results.txt, diagnose_public.py and public re-test, tunnel recovery test, review and commit the state files, and save a real Claude Desktop transcript.
