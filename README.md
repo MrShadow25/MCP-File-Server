@@ -27,7 +27,7 @@ uv sync
 .\.venv\Scripts\python.exe -m pytest test/ -q
 ```
 
-Recorded result: **39 passed, 1 skipped**. The skipped test concerns symbolic-link behavior on Windows.
+Recorded result: **46 passed, 1 skipped**. The skipped test concerns symbolic-link behavior on Windows.
 
 ## Local client
 
@@ -65,7 +65,7 @@ Configure the MCP-compatible desktop client to launch the project's Python envir
 
 File operations are restricted to `workspace`; absolute paths and paths resolving outside it are rejected. Additional symbolic-link checks are present. Git inspection tools are read-only. The remote proxy requires bearer-token authentication.
 
-Limitations include a possible time-of-check/time-of-use race, a shared bearer token, a destructive delete tool without a separate confirmation gate, and platform-specific symlink behavior. These protections do not guarantee complete filesystem isolation.
+Limitations include a possible time-of-check/time-of-use race, a shared bearer token, a destructive delete tool that requires explicit confirmation (`confirm=True`), and platform-specific symlink behavior. These protections do not guarantee complete filesystem isolation.
 
 ## Evidence
 
@@ -74,7 +74,7 @@ Limitations include a possible time-of-check/time-of-use race, a shared bearer t
 - `handoff-transcript.txt` — recorded two-session task exchange.
 - `security_design_report.md` — design rationale, security trade-offs, and limitations.
 
-Both services have been observed starting under `service_manager.py`. Automatic restart after a child process crash remains unverified. The existing handoff transcript records a simple `READY` to `COMPLETED` exchange; if the rubric requires a genuine multi-step task performed interactively in Claude Desktop, capture that actual interaction separately.
+Both services have been observed starting under `service_manager.py`. Automatic restart of both the MCP server and authentication proxy was verified and recorded in workspace/PROCESS_MANAGER_RESTART_LOG.txt. Tunnel restart and recovery remain untested. The existing handoff transcript records a simple `READY` to `COMPLETED` exchange; if the rubric requires a genuine multi-step task performed interactively in Claude Desktop, capture that actual interaction separately.
 
 
 ## Handoff state files

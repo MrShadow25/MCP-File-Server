@@ -87,3 +87,25 @@ Done by an assistant in a separate chat that had the `demo` MCP tools but not th
 - Created `evidence/session2-transcript.txt` (inside `workspace/`) as a PLACEHOLDER only. The raw Session 2 tool-call records and the post-read recovery summary are UNAVAILABLE; the user must copy the real records out of Claude Desktop.
 - Not verified: contents of repo-root `test-results.txt`, restart behavior, tunnel/client config, Git commits, and whether Session 2 was a genuinely fresh context.
 Handoff status: still NOT complete.
+
+## Current Status Update — 2026-10-17
+### Verified
+- The saved pytest output reports 46 passed, 1 skipped, 0 failed in 2.71 seconds.
+- The process-manager restart log records restarts of both the MCP server and authentication proxy.
+- The scripted multi-session handoff completed successfully; its transcript is in the repository root.
+- Git contains two local commits: 016ed85 and 3b59308.
+- README.md and security_design_report.md have been updated to reflect the verified test and restart results.
+
+### Still Incomplete or Unverified
+- A genuinely fresh Claude Desktop session has not yet independently recovered the project state from the four handoff files.
+- The current tunnel and Claude Desktop client configuration have not been re-verified in this update.
+- Tunnel restart and recovery have not been tested.
+- The latest README and security report edits and this state update are not yet committed.
+- Windows symbolic-link behavior remains skipped/unverified.
+
+### Next Actions
+1. Update CHECKPOINTS to match this status.
+2. Review the four handoff files and current Git diff.
+3. Verify tunnel/client configuration without exposing the bearer token.
+4. Perform the genuine fresh-session handoff if the required client is available.
+5. Commit the reviewed documentation and handoff updates.

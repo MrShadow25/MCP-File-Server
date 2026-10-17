@@ -37,3 +37,15 @@
 - [ ] Review meaningful Git milestone commits
 - [ ] `.gitignore` unreadable via MCP; `.idea/` shows untracked (not ignored). Add `.idea/`, `.venv/`, `.env*`, caches, logs rules (verified only by inference from git_status)
 - [ ] Scan untracked scripts/logs for bearer token or tunnel URL before first commit (contents unverified)
+
+## Status Update — 2026-10-17
+- [x] Pytest evidence confirmed locally: 46 passed, 1 skipped, 0 failed in 2.71 seconds.
+- [x] Process-manager restart evidence recorded for both the MCP server and authentication proxy.
+- [x] Scripted two-session handoff completed and transcript saved; this is not a genuine Claude Desktop transcript.
+- [x] Two local Git commits exist: 016ed85 and 3b59308.
+- [x] README.md and security_design_report.md updated with current test and restart evidence.
+- [ ] Verify current HTTPS tunnel URL and Claude Desktop client configuration without exposing the token.
+- [ ] Test tunnel restart/recovery.
+- [ ] Complete a genuine fresh Claude Desktop session that independently recovers the handoff state.
+- [ ] Review final Git diff, stage only intended files, and commit the documentation/state updates.
+- [ ] Windows symbolic-link behavior remains unverified because the test was skipped.

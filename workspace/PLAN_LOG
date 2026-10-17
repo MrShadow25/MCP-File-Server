@@ -87,3 +87,12 @@
 **Not tested:** tunnel supervision (the tunnel is not managed by `service_manager.py`).
 **Not independently verified by an MCP tool:** these files were created on the host; the assistant tools only read them as workspace text.
 **Handoff status:** still NOT complete.
+
+## Progress Update — 2026-10-17
+- Confirmed the saved pytest output: 46 passed, 1 skipped, 0 failed in 2.71 seconds.
+- Confirmed the process-manager log records automatic restarts of both the MCP server and authentication proxy.
+- Updated README.md and security_design_report.md to reflect the current test and restart evidence and the delete confirmation requirement.
+- Git has two local commits: 016ed85 and 3b59308. Documentation edits are currently uncommitted.
+- The scripted two-session handoff test passed, but it is not a substitute for a genuinely fresh Claude Desktop session recovering state from the handoff files.
+- Still unverified: current tunnel/client configuration, tunnel recovery, and a genuine fresh-session handoff transcript.
+- Next: update PROJECT_STATE and CHECKPOINTS, then verify Git status and review the final submission evidence.
