@@ -96,3 +96,9 @@
 - The scripted two-session handoff test passed, but it is not a substitute for a genuinely fresh Claude Desktop session recovering state from the handoff files.
 - Still unverified: current tunnel/client configuration, tunnel recovery, and a genuine fresh-session handoff transcript.
 - Next: update PROJECT_STATE and CHECKPOINTS, then verify Git status and review the final submission evidence.
+
+## 2026-10-17 10:47 +08 — Public MCP retest
+- PASS: Two independent public MCP sessions initialized successfully.
+- PASS: All 9 tools were discovered in both sessions.
+- PASS: Session 2 recovered the READY task, marked it COMPLETED, and verified the final state.
+- Transcript: handoff-transcript.txt (latest run, 10:47:37 +08).

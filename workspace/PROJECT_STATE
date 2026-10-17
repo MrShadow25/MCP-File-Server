@@ -109,3 +109,12 @@ Handoff status: still NOT complete.
 3. Verify tunnel/client configuration without exposing the bearer token.
 4. Perform the genuine fresh-session handoff if the required client is available.
 5. Commit the reviewed documentation and handoff updates.
+
+### Update — 2026-10-17 10:47 +08
+- Public ngrok tunnel URL confirmed active through the local ngrok API.
+- Public GET /mcp returned HTTP 200 without a bearer token; this confirms HTTP reachability only.
+- Public MCP test passed in two independent sessions; all 9 tools were discovered in both, and Session 2 completed Session 1's handoff task.
+- Latest scripted transcript: handoff-transcript.txt, timestamp 10:47:37 +08.
+- Claude Desktop Demo configuration was inspected safely: it launches an existing Python script through local stdio, not the public URL.
+- Still unverified: live Claude Desktop remote connection and tunnel restart/recovery. Windows symlink test remains skipped.
+- Latest transcript and handoff-log updates require review and commit.

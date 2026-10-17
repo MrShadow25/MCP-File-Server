@@ -49,3 +49,11 @@
 - [ ] Complete a genuine fresh Claude Desktop session that independently recovers the handoff state.
 - [ ] Review final Git diff, stage only intended files, and commit the documentation/state updates.
 - [ ] Windows symbolic-link behavior remains unverified because the test was skipped.
+
+## 2026-10-17 — Public MCP retest (10:47 +08)
+- [x] Public MCP connection and initialization verified for two independent sessions.
+- [x] All 9 tools discovered in both sessions.
+- [x] Cross-session task handoff verified through COMPLETED status.
+- [x] Latest test transcript saved to handoff-transcript.txt.
+- [ ] Live Claude Desktop remote connection not verified; configured client still uses local stdio.
+- [ ] Tunnel restart and recovery not tested.
