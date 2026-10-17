@@ -118,3 +118,16 @@
 - [ ] Commit reviewed state files and decide on untracked Fix_restart_state.py. Nothing committed by this session; ask the user first
 - [ ] PROJECT_STATE "no remote configured" is stale (git_status shows master...origin/master); whether anything was pushed is unverified
 - [ ] handoff_demo.txt stays IN PROGRESS (not touched)
+
+## Session 2 (new conversation, claude.ai chat with Demo tools; NOT Claude Desktop) - 2026-10-17 (second pass)
+- [x] Read handoff_demo.txt, handoff_report.txt, PROJECT_STATE, PLAN_LOG, CHECKPOINTS, DECISIONS (all succeeded; one per call, not one batch; tool_search first)
+- [x] Workspace file-tool task passed: list_files, read_file, write_file, read-back, delete_file(confirm=true), final list_files confirming cleanup. Record: `evidence/session3-mcp-task-transcript.txt`
+- [x] Re-read restart log (7 lines) and PowerShell transcript (28 lines); conclusions unchanged: separate runs, no timestamps on the log, tunnel not covered
+- [x] Confirmed evidence/session2-transcript.txt is still a placeholder and session2-fresh-transcript.txt is a summary, not raw transcripts
+- [x] git_diff: no output (no git_status tool this session, so untracked files and commits were not re-checked)
+- [ ] `test-results.txt` is NOT readable from the workspace ("file does not exist"); the 46 passed / 1 skipped figure stays host-reported and unverified here
+- [ ] No public-diagnostic output exists in workspace/; only the failed 11:49 transcript ("MCPError: Not Found", cause undetermined). Run diagnose_public.py on the host and save the output
+- [ ] Tunnel restart/recovery: NOT run, NOT passed. Tunnel command/URL and client config (token redacted): still unrecorded
+- [ ] Windows pytest re-run, public re-test, Windows symlink behaviour: not run
+- [ ] Real raw Claude Desktop tool-call transcript: still missing
+- [ ] handoff_demo.txt stays IN PROGRESS (not touched)

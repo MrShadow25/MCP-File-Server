@@ -154,3 +154,9 @@ Handoff status: still NOT complete.
 9. Commit of reviewed state files; decision on `Fix_restart_state.py`. Nothing committed by this session.
 
 Handoff status: still NOT complete. handoff_demo.txt stays IN PROGRESS (not touched).
+
+## Session 2 Update: Evidence Re-check + MCP Task (2026-10-17; claude.ai chat with Demo tools; NOT Claude Desktop; no command execution)
+Verified by tool output: six handoff files read; git_diff empty (no git_status tool this session); `test-results.txt` does NOT exist from the workspace view, so the 46 passed / 1 skipped result is host-reported only and unconfirmed here (the earlier "Confirmed" wording in "Current Status Update" should be read that way); no public-diagnostic output exists in workspace/ (only the failed 11:49 transcript, "MCPError: Not Found", cause undetermined); restart log and PowerShell transcript re-read, still separate runs; session2-transcript.txt is still a placeholder.
+Workspace task PASSED: list, read, write test note, read back, delete (confirm=true), final list showed the note gone. Record: `evidence/session3-mcp-task-transcript.txt`.
+Not run / not verified: pytest, diagnose_public.py, public re-test, tunnel restart/recovery (NOT passed), tunnel/client config, Windows symlinks, commit state, raw Claude Desktop transcript.
+Handoff status: IN PROGRESS. handoff_demo.txt unchanged.

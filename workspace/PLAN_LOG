@@ -205,3 +205,23 @@
 **Tools called before this entry:** git_status x1, list_files x1 (failed: not a directory), read_file x3 (diagnose_public.py failed; two restart files read), search_files x2, bash_tool x1 (environment check only). Edit and read-back calls follow and are listed in the final reply.
 
 **Handoff status:** still NOT complete. handoff_demo.txt stays IN PROGRESS and was not touched.
+
+## 2026-10-17 - Session 2 (new conversation; claude.ai chat with Demo MCP tools; NOT Claude Desktop)
+**Context:** this conversation started with no memory of earlier sessions; state was recovered from the files. It is NOT a Claude Desktop session, so it does not satisfy a "genuine Claude Desktop fresh session" requirement. Read-order caveats: tool_search ran first, then one list_files, then the six files were read one per call (not one parallel batch). The prompt named `workspace/X`; the tool root IS the workspace, so those paths were read as `X`.
+
+**Read first, all succeeded:** handoff_demo.txt (3 lines, IN PROGRESS), handoff_report.txt (61 lines), PROJECT_STATE (156 lines), PLAN_LOG (207 lines), CHECKPOINTS (120 lines), DECISIONS (25 lines).
+
+**Verified by tool output this session:**
+- git_diff: no output. This session had no git_status tool, so untracked files, commit hashes and remote contents were NOT re-checked.
+- `read_file test-results.txt` FAILED: "The file does not exist." (outside the workspace view). The 46 passed / 1 skipped, 2.71 s figure is therefore NOT independently verified here; it remains host-reported.
+- No public-diagnostic output exists in `workspace/`. A search for "diagnose" matched only mentions inside PLAN_LOG and CHECKPOINTS (result cap of 10 reached). The only public-run artifact is evidence/handoff-transcript-FAILED-2026-10-17T1149.txt (4 lines): timestamp 2026-10-17T11:49:20+08:00, "FAIL: MCPError: Not Found". Its cause (missing /mcp vs tunnel offline) is still undetermined.
+- PROCESS_MANAGER_RESTART_LOG.txt re-read (7 lines): MCP server PID 5372 -> 17196 and auth proxy PID 24240 -> 22524, both "exited with code 4294967295"; no timestamps; the cause of exit is not shown.
+- PROCESS_MANAGER_RESTART_TRANSCRIPT.txt re-read (28 lines): PowerShell transcript 08:22:24-08:23:31 that finds the port-8001 listener (PID 22828) and runs Stop-Process on it. The PID matches neither log PID and the transcript has no manager output, so the two files are separate runs.
+- evidence/session2-transcript.txt (102 lines) is still a self-declared PLACEHOLDER. evidence/session2-fresh-transcript.txt (62 lines) is a self-declared SUMMARY with unverified tool counts. Neither is a raw Claude Desktop transcript.
+- Workspace file-tool task PASSED: list_files, read_file (search_test.md), write_file, read-back, delete_file (confirm=true), and a final list_files showing the note gone. Full record: evidence/session3-mcp-task-transcript.txt.
+
+**Not verified (no command-execution tool; nothing run):** pytest, tunnel/client config, tunnel restart/recovery (NOT run, NOT passed), public re-test with current code, diagnose_public.py output, Windows symlink behaviour, commit state.
+
+**Corrections to earlier text:** PROJECT_STATE "Current Status Update" says pytest output was "confirmed"; this session could not confirm it. Treat it as host-reported until the user checks `Get-Content test-results.txt -Tail 5` locally.
+
+**Handoff status:** still IN PROGRESS / NOT complete. handoff_demo.txt left unchanged.
