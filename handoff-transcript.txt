@@ -1,1 +1,16 @@
-FAIL: FileNotFoundError: The .mcp-token file was not found.
+MCP multi-session handoff demonstration
+Timestamp: 2026-10-17T09:35:35.005163+08:00
+
+Session 1: connected and initialized.
+Session 1: verified all 9 tools.
+Session 1: created handoff task in the workspace.
+Session 1: handed off task with status READY.
+Session 1: disconnected.
+
+Session 2: connected and initialized.
+Session 2: verified all 9 tools.
+Session 2: read the task left by Session 1.
+Session 2: confirmed status READY.
+Session 2: updated task status to COMPLETED.
+Session 2: verified the final task state.
+PASS: Multi-session handoff completed successfully.

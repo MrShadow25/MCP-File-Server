@@ -1,0 +1,3 @@
+Task: Verify MCP multi-session handoff
+Status: COMPLETED
+Next action: Mark the task completed.
