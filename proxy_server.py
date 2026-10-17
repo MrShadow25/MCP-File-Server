@@ -54,9 +54,25 @@ async def proxy(request: Request):
             headers=response_headers,
         )
 
-app = Starlette(routes=[
-    Route("/mcp", proxy, methods=["GET", "POST", "DELETE"]),
-])
+async def health(request: Request):
+    # No secrets, no upstream access: only proves tunnel -> proxy works.
+    return JSONResponse({"status": "ok", "mcp_path": "/mcp"})
+
+
+async def not_found(request: Request, exc):
+    return JSONResponse(
+        {"error": "Not Found", "hint": "The MCP endpoint is /mcp"},
+        status_code=404,
+    )
+
+
+app = Starlette(
+    routes=[
+        Route("/healthz", health, methods=["GET"]),
+        Route("/mcp", proxy, methods=["GET", "POST", "DELETE"]),
+    ],
+    exception_handlers={404: not_found},
+)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8001)

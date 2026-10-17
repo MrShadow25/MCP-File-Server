@@ -118,3 +118,17 @@ Handoff status: still NOT complete.
 - Claude Desktop Demo configuration was inspected safely: it launches an existing Python script through local stdio, not the public URL.
 - Still unverified: live Claude Desktop remote connection and tunnel restart/recovery. Windows symlink test remains skipped.
 - Latest transcript and handoff-log updates require review and commit.
+
+## Repair Session Update - 2026-10-17 (supersedes earlier "Public MCP retest" claims where they conflict)
+### Verified in this session (real runs, Linux, local chain)
+- Unit suite: 55 passed, 2 failed (the 2 are Windows-drive-path tests; expected on Linux). Windows re-run still needed.
+- Local client -> auth proxy -> MCP server: initialize OK, 9 tools, two-session handoff PASS, tool tests PASS, parent-directory and absolute-path reads rejected, missing token -> 401.
+- `MCPError: Not Found` reproduced when the URL lacks `/mcp`; fixed by URL normalisation in the scripts. Proxy now returns a helpful JSON 404 and has `/healthz`.
+### Historical (earlier runs, not repeated in this session)
+- Windows pytest 46 passed, 1 skipped; process-manager restart log; public handoff PASS at 10:47:37 +08.
+### Unverified
+- Why the public URL returned Not Found at 11:49 (wrong path vs tunnel offline). Run `diagnose_public.py` on the host.
+- Public URL with the new code; tunnel recovery; live Claude Desktop remote connection (configured client uses stdio); Windows symlink behaviour.
+### Not complete
+- Genuine fresh-session handoff transcript. `workspace/evidence/session2-transcript.txt` is a PLACEHOLDER and must not be presented as a real transcript.
+- GitHub publication (no remote configured).

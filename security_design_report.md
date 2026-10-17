@@ -30,7 +30,13 @@ These controls are risk reductions, not a guarantee of complete isolation. For s
 
 ## 5. Verification evidence
 
-The latest recorded automated test result is **46 passed, 1 skipped, 0 failed (2.71 seconds; 2026-10-17)**. The skipped test concerns symbolic-link behavior on Windows. `deployment-test.txt` records successful connections from two independent MCP sessions and the expected result from the addition tool. `handoff-transcript.txt` records a two-session `READY` to `COMPLETED` task exchange.
+Verification is split into what was run recently and what is historical.
+
+**Re-run during the 2026-10-17 repair session (Linux, MCP SDK 2.x, current code):** 55 passed, 2 failed in the unit suite. The two failures are the Windows-drive-path tests, which cannot pass on Linux. Against a locally started server and authentication proxy (not the public tunnel) the public scripts passed: two-session handoff, all nine tools, missing-token 401, and parent-directory and absolute-path rejection. Process-manager restart and the public ngrok URL were **not** re-tested in that session.
+
+**Historical (Windows, earlier):** 46 passed, 1 skipped, 0 failed (2.71 seconds), and the restart log.
+
+**Defects found and fixed in that session:** (a) the public test scripts read `result.isError` while the SDK exposes `is_error`, so failed tool calls were counted as successes and the boundary check printed a false FAIL; (b) `git_diff` could crash on non-UTF-8 output; (c) the proxy returned a bare text 404, which was indistinguishable from an ngrok offline error. It now returns a JSON hint and an open `/healthz` route. The skipped test concerns symbolic-link behavior on Windows. `deployment-test.txt` records successful connections from two independent MCP sessions and the expected result from the addition tool. `handoff-transcript.txt` records a two-session `READY` to `COMPLETED` task exchange.
 
 The process manager successfully started the MCP HTTP server on port 8000 and the authentication proxy on port 8001. Automatic restart of both child services was verified on 2026-10-17 and recorded in `workspace/PROCESS_MANAGER_RESTART_LOG.txt`.
 
@@ -38,7 +44,7 @@ The existing handoff transcript demonstrates a simple cross-session task exchang
 
 ## 6. Conclusion
 
-The project has a working MCP tool set, workspace path controls, authenticated remote access, automated tests, and recorded multi-session/deployment checks. Remaining verification should focus on a real rubric-aligned Claude Desktop handoff, automatic process recovery, reproducible tunnel setup, and final repository review.
+The project has a working MCP tool set, workspace path controls, authenticated remote access, automated tests, and recorded multi-session/deployment checks. Remaining verification should focus on any additional rubric-required Claude Desktop handoff, tunnel recovery, reproducible deployment setup, and final repository review.
 
 
 ## Additional tool safeguards

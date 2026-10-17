@@ -11,9 +11,9 @@ from mcp.client.streamable_http import streamable_http_client
 BASE_DIR = Path(__file__).resolve().parent
 TOKEN_FILE = BASE_DIR / ".mcp-token"
 TRANSCRIPT_FILE = BASE_DIR / "handoff-transcript.txt"
-SERVER_URL = os.environ.get("MCP_SERVER_URL")
-if not SERVER_URL:
-    raise RuntimeError("Set the MCP_SERVER_URL environment variable to your public MCP endpoint.")
+from public_config import get_server_url
+
+SERVER_URL = get_server_url()
 HANDOFF_FILE = "handoff_demo.txt"
 
 transcript = []

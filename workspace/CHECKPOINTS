@@ -57,3 +57,15 @@
 - [x] Latest test transcript saved to handoff-transcript.txt.
 - [ ] Live Claude Desktop remote connection not verified; configured client still uses local stdio.
 - [ ] Tunnel restart and recovery not tested.
+
+## Repair Session - 2026-10-17
+- [x] `MCPError: Not Found` reproduced locally and traced to the request path (/mcp); URL normalisation added to all public scripts
+- [x] Proxy: helpful 404 + open /healthz; authentication on /mcp unchanged
+- [x] Public-test scripts fixed (`is_error`), git_diff decoding fixed, pytest collection fixed (`testpaths`)
+- [x] Local chain re-verified: 9 tools, handoff PASS, sandbox-boundary PASS, missing token 401 (Linux)
+- [ ] Re-run on Windows: `pytest -q` (expect 56 passed, 1 skipped) and update `test-results.txt`
+- [ ] Run `diagnose_public.py` against the public URL and keep the output
+- [ ] Re-run `test_public_mcp.py` publicly and save the new transcript
+- [ ] Tunnel restart/recovery test
+- [ ] Genuine fresh Claude Desktop handoff transcript (placeholder file is NOT evidence)
+- [ ] GitHub remote created and pushed

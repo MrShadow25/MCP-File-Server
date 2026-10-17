@@ -10,9 +10,9 @@ from mcp.client.streamable_http import streamable_http_client
 
 BASE_DIR = Path(__file__).resolve().parent
 TOKEN_FILE = BASE_DIR / ".mcp-token"
-SERVER_URL = os.environ.get("MCP_SERVER_URL")
-if not SERVER_URL:
-    raise RuntimeError("Set the MCP_SERVER_URL environment variable to your public MCP endpoint.")
+from public_config import get_server_url
+
+SERVER_URL = get_server_url()
 
 
 def show_result(name, result):
@@ -21,7 +21,7 @@ def show_result(name, result):
         item.text for item in result.content if hasattr(item, "text")
     )
     print(output or "(No text output)")
-    return output, not getattr(result, "isError", False)
+    return output, not (getattr(result, "is_error", None) or getattr(result, "isError", False))
 
 
 async def main():

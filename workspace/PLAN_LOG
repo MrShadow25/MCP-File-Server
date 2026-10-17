@@ -102,3 +102,18 @@
 - PASS: All 9 tools were discovered in both sessions.
 - PASS: Session 2 recovered the READY task, marked it COMPLETED, and verified the final state.
 - Transcript: handoff-transcript.txt (latest run, 10:47:37 +08).
+
+## 2026-10-17 - Repair session: public "Not Found" investigation (assistant with file access to a copy of the repository)
+**Symptom:** `MCPError: Not Found` at initialize against the public URL at 11:49 +08. The same scripts passed at 10:47 +08.
+
+**Reproduced locally (real runs, not assumed):**
+- The proxy has one MCP route, `/mcp`. A request to any other path returns 404 `Not Found`. Running `test_public_mcp.py` with `MCP_SERVER_URL` set to the bare host raised exactly `MCPError: Not Found`; with `/mcp` appended it passed. The scripts previously used `MCP_SERVER_URL` verbatim.
+- The local chain client -> proxy (8001) -> server (8000) works with the current code and the real token: initialize, 9 tools, handoff PASS.
+
+**Not determinable from here:** whether the 11:49 failure was a missing `/mcp` in the environment variable, or the ngrok tunnel being offline (ngrok also answers 404, error ERR_NGROK_3200). The public domain could not be exercised with MCP from the repair environment; a plain fetch of the URL returned an ngrok HTML page, which is not conclusive. `diagnose_public.py` separates the cases and must be run on the host.
+
+**Fixes made:** `public_config.py` appends `/mcp` when missing; proxy 404 now returns a JSON hint and `/healthz` was added (unauthenticated, no secrets; authentication on `/mcp` unchanged); test scripts read `is_error` (the old `isError` check counted failures as passes); `git_diff` decodes output as UTF-8 with replacement; `pyproject.toml` restricts pytest to `test/`; 10 tests added; `.gitattributes` added to stop CRLF/LF noise; `.gitignore` extended.
+
+**Evidence preserved, not altered:** the failed 11:49 run is saved as `workspace/evidence/handoff-transcript-FAILED-2026-10-17T1149.txt`; the last passing transcript (10:47:37) was restored as `handoff-transcript.txt`; `PROCESS_MANAGER_RESTART_LOG.txt` was restored from Git (it had been deleted from the working tree).
+
+**Still not done:** public endpoint re-test on the host; tunnel restart/recovery; genuine fresh Claude Desktop session transcript; GitHub publication.

@@ -314,6 +314,8 @@ def run_git(*args: str) -> str:
             ["git", "-C", str(project_root), *args],
             capture_output=True,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             timeout=10,
             check=False,
         )

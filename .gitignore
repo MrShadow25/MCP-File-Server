@@ -22,3 +22,9 @@ wheels/
 
 # Workspace runtime logs
 workspace/mcp_server.log
+
+# Tunnel credentials and generated local evidence
+ngrok.yml
+*.pem
+*.key
+credentials*
