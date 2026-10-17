@@ -1,0 +1,76 @@
+SESSION RECORD - MCP HANDOFF RECOVERY (claude.ai chat with Demo MCP tools; NOT Claude Desktop)
+Date: 2026-10-17 (message time 15:09 +08)
+==========================================================================
+HONESTY NOTES
+- This is a record written by the assistant from its own tool calls in this
+  conversation. It is NOT an export from a client UI and NOT a Claude Desktop
+  transcript. Short results are quoted exactly; long file contents are
+  summarised with line counts (full text is in the named files).
+- The conversation began with no memory of earlier sessions. State was
+  recovered from the files.
+- Only the Demo MCP file/Git tools and ToolSearch were used. No command
+  execution against the project was available, so no pytest, diagnose_public.py,
+  tunnel or restart command was run.
+- No authentication token appears in any call or result, and none was read.
+- Server source code was not read or modified. No file was deleted.
+- The call that writes THIS file (call 24), and the read-back calls after it,
+  cannot record their own results here.
+
+CALLS, IN ORDER
+ 1. ToolSearch(select: list_files, read_file, write_file, search_files, replace_in_file)
+      -> loaded 5 tool schemas. Loader step only.
+ 2. list_files(".")
+      -> CHECKPOINTS, DECISIONS, evidence/, handoff_demo.txt, handoff_report.txt,
+         mcp_server.log, PLAN_LOG, PROCESS_MANAGER_RESTART_LOG.txt,
+         PROCESS_MANAGER_RESTART_TRANSCRIPT.txt, PROJECT_STATE, search_test.md
+ 3. read_file(PROJECT_STATE)   -> OK, 162 lines   (calls 3-7 issued as one parallel batch)
+ 4. read_file(PLAN_LOG)        -> OK, lines 1-200 of 227 (default limit)
+ 5. read_file(CHECKPOINTS)     -> OK, 133 lines
+ 6. read_file(DECISIONS)       -> OK, 25 lines
+ 7. list_files("evidence")     -> handoff-transcript-FAILED-2026-10-17T1149.txt,
+                                  session-tool-call-log.txt, session2-fresh-transcript.txt,
+                                  session2-transcript.txt, session3-mcp-task-transcript.txt
+ 8. ToolSearch(select: git_status, git_diff) -> loaded 2 tool schemas.
+ 9. read_file(PLAN_LOG, offset=200, limit=100) -> OK, lines 201-227
+10. read_file(handoff_demo.txt)  -> OK, 3 lines, "Status: IN PROGRESS ..."
+11. read_file(handoff_report.txt) -> OK, 61 lines
+12. read_file(evidence/session3-mcp-task-transcript.txt) -> OK, 95 lines
+13. git_status() -> "## master...origin/master" (no modified, no untracked entries)
+14. git_diff()   -> "No output."
+15. list_files(".") -> same 11 entries as call 2
+16. read_file(test-results.txt) -> ERROR: "The file does not exist."
+17. search_files("handoff_demo.txt left unchanged.") -> 1 match, PLAN_LOG line 227 (anchor check)
+18. search_files("Handoff status: IN PROGRESS. handoff_demo.txt unchanged.") -> 1 match, PROJECT_STATE line 162
+19. search_files("handoff_demo.txt stays IN PROGRESS (not touched)") -> matches in
+      CHECKPOINTS lines 120 and 133, PROJECT_STATE line 156, and two lines of the
+      session3 transcript (so a two-line anchor was used for CHECKPOINTS)
+--- State-file updates ---
+20. replace_in_file(PLAN_LOG, anchor = last line)        -> "Occurrences replaced: 1"
+21. replace_in_file(PROJECT_STATE, anchor = last line)   -> "Occurrences replaced: 1"
+22. replace_in_file(CHECKPOINTS, two-line anchor at end) -> "Occurrences replaced: 1"
+23. replace_in_file(DECISIONS, item 8 final sentence)    -> "Occurrences replaced: 1"
+--- This file ---
+24. write_file(evidence/handoff-recovery-2026-10-17T1509-transcript.txt) -> this file
+
+TOTALS BEFORE CALL 24: 23 calls = 2 ToolSearch + 21 Demo MCP calls
+  (list_files 3, read_file 9 [1 failed], git_status 1, git_diff 1,
+   search_files 3, replace_in_file 4)
+
+UNFINISHED HANDOFF REQUIREMENT (identified from the four state files)
+- A genuine raw Claude Desktop tool-call transcript of a fresh session that
+  recovers state from PROJECT_STATE, PLAN_LOG, CHECKPOINTS and DECISIONS.
+  This chat is a fresh context but not Claude Desktop, so it does not satisfy that.
+
+FILES CHANGED BY THIS SESSION
+- PLAN_LOG, PROJECT_STATE, CHECKPOINTS: appended one dated entry each.
+- DECISIONS: dated note appended to item 8.
+- evidence/handoff-recovery-2026-10-17T1509-transcript.txt: created (this file).
+- NOT changed: handoff_demo.txt (still IN PROGRESS), handoff_report.txt, other
+  evidence files, server source code.
+
+STILL MISSING (handoff stays IN PROGRESS)
+- Raw Claude Desktop tool-call transcript (session2-transcript.txt is a placeholder).
+- Host-side pytest output (test-results.txt not readable from the workspace).
+- diagnose_public.py output and a public re-test with current code.
+- Tunnel restart/recovery test; tunnel command/URL and client config (token redacted).
+- Windows symlink behaviour; commit hashes and remote contents (no git log tool).

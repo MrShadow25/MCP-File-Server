@@ -1,3 +1,4 @@
-Task: Verify MCP multi-session handoff
+Task: Session 1 has prepared a handoff for Session 2.
+Task Name: handoff_demo
 Status: COMPLETED
-Next action: Mark the task completed.
+Next Action (Session 2): Handoff completed and verified by Session 2.
